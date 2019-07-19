@@ -1,0 +1,37 @@
+{
+  "name": "realworld-nodejs-express-sequelize",
+  "version": "1.0.0",
+  "description": "> ### [YOUR_FRAMEWORK] codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "migrate": "sequelize db:migrate --migrations-path=api/migrations/ --config=api/config/config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CovertIII/realworld-starter-kit.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CovertIII/realworld-starter-kit/issues"
+  },
+  "homepage": "https://github.com/CovertIII/realworld-starter-kit#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.3",
+    "bluebird": "^3.5.3",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.4.0",
+    "pg": "^7.8.0",
+    "pg-hstore": "^2.3.2",
+    "pluralize": "^7.0.0",
+    "ramda": "^0.26.1",
+    "sequelize": "^5.10.1",
+    "sequelize-cli": "^5.4.0",
+    "slug": "^1.1.0"
+  }
+}
