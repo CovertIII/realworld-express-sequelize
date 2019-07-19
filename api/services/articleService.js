@@ -6,6 +6,7 @@ const marked = require('marked');
 const { Article } = require('../models/article.js');
 const { Comment } = require('../models/comment.js');
 const { User } = require('../models/user.js');
+const { Follow } = require('../models/follow.js');
 const { Favorite } = require('../models/favorite.js');
 const { FavoriteCount } = require('../models/favoriteCount.js');
 const slugify = require('slug');
@@ -57,6 +58,32 @@ const getArticle = ({
     transformArticle,
     article => ({article})
   ));
+};
+
+const getFeed = ({
+  currentUserId
+}) => {
+  const defaultOptions = getDefaultOptions(currentUserId);
+  const include = defaultOptions.include.concat([{
+    model: Follow,
+    as: 'followers',
+    where: { followerId: currentUserId }
+  }]);
+
+  console.log('feed include', include);
+
+  return Article.findAndCountAll({
+    include,
+    order: [[
+      'createdAt',
+      'DESC'
+    ]]
+  }).then(({count, rows}) => {
+    return {
+      articles: rows.map(transformArticle),
+      articlesCount: count
+    };
+  });
 };
 
 const getArticlesList = ({
@@ -242,6 +269,7 @@ const unfavoriteArticle = ({
 module.exports = {
   createArticle,
   getArticlesList,
+  getFeed,
   getArticle,
   updateArticle,
   deleteArticle,

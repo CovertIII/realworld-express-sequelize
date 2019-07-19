@@ -2,6 +2,7 @@ const { wrap } = require('../middleware/error-middleware.js');
 const {
   createArticle,
   getArticlesList,
+  getFeed,
   getArticle,
   updateArticle,
   deleteArticle,
@@ -37,10 +38,8 @@ const init = async router => {
 
   router.get('/articles/feed', wrap((req, res) => {
     const userId = path(['user', 'id'], req);
-    return getArticlesList({
-      currentUserId: userId,
-      orderBy: 'createdAt',
-      orderDirection: 'DESC'
+    return getFeed({
+      currentUserId: userId
     }).then( result => {
       return res.json(result);
     });

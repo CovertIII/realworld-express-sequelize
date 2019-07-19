@@ -13,6 +13,7 @@ const init = () => {
 
   Article.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
   Article.hasOne(FavoriteCount, { foreignKey: 'articleId', as: 'favoriteCount' });
+  Article.hasMany(Follow, { foreignKey: 'userId', as: 'followers', sourceKey: 'authorId' });
 
   Article.belongsToMany(User, { as: 'users', through: Favorite, foreignKey: 'articleId' });
   User.belongsToMany(Article, { as: 'favorites', through: Favorite, foreignKey: 'userId' });
