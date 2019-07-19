@@ -40,7 +40,7 @@ const transformArticle = R.pipe(
   article => R.assoc('favorited', R.pathOr(0, ['users','length'], article) > 0, article),
   article => R.assoc('favoritesCount', Number(R.pathOr(0, ['favoriteCount','count'], article)), article),
   //TODO: XSS Vulernability here
-  article => R.assoc('htmlBody', marked(article.body), article),
+  article => R.assoc('htmlBody', marked(article.body || ''), article),
   R.omit(['users', 'favoriteCount'])
 );
 
