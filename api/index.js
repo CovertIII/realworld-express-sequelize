@@ -45,6 +45,10 @@ const main = async () => {
 
   app.use('/api', router);
 
+  app.use((req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+  });
+
   app.listen(port, () => {
     console.log('Express server listening on port ' + port);
   });
