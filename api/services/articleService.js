@@ -2,6 +2,7 @@ const R = require('ramda');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const db = require('../models/db.js');
+const marked = require('marked');
 const { Article } = require('../models/article.js');
 const { Comment } = require('../models/comment.js');
 const { User } = require('../models/user.js');
@@ -37,6 +38,8 @@ const transformArticle = R.pipe(
   article => article.toJSON(),
   article => R.assoc('favorited', R.pathOr(0, ['users','length'], article) > 0, article),
   article => R.assoc('favoritesCount', Number(R.pathOr(0, ['favoriteCount','count'], article)), article),
+  //TODO: XSS Vulernability here
+  article => R.assoc('htmlBody', marked(article.body), article),
   R.omit(['users', 'favoriteCount'])
 );
 
