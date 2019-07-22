@@ -10,13 +10,21 @@ const {
   unfollowUsername
 } = require('../services/userService.js');
 
+const { schemaValidationMiddleware } = require('../middleware/schemaValidationMiddleware.js');
+
+const { userSchema, createUserSchema } = require('../schemas/userSchema.js');
+
 const init = async router => {
-  router.post('/users', wrap((req, res) => {
-    const { user } = req.body;
-    return createUser(user).then( user => {
-      return res.json(user);
-    });
-  }));
+  router.post(
+    '/users',
+    schemaValidationMiddleware(createUserSchema),
+    wrap((req, res) => {
+      const { user } = req.body;
+      return createUser(user).then( user => {
+        return res.json(user);
+      });
+    })
+  );
 
 
   router.post('/users/login', wrap((req, res) => {
@@ -30,17 +38,21 @@ const init = async router => {
     res.json({user: req.user});
   });
 
-  router.put('/user', requireUserMiddleware, wrap((req, res) => {
-    const token = req.user.token;
-    const id = req.user.id;
-    return updateUser({
-      id,
-      token,
-      body: req.body.user
-    }).then( result => {
-      return res.json(result);
-    });
-  }));
+  router.put('/user',
+    requireUserMiddleware,
+    schemaValidationMiddleware(userSchema),
+    wrap((req, res) => {
+      const token = req.user.token;
+      const id = req.user.id;
+      return updateUser({
+        id,
+        token,
+        body: req.body.user
+      }).then( result => {
+        return res.json(result);
+      });
+    })
+  );
 
   router.get('/profiles/:username', wrap((req, res) => {
     const userId = path(['user', 'id'], req);

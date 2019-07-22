@@ -5,21 +5,12 @@ module.exports = {
       email: {
         type: Sequelize.TEXT,
         allowNull: false,
-        validate: {
-          isEmail:true
-        },
-        unique: {
-          args: true,
-          msg: 'That email address has already been registered'
-        }
+        unique: true,
       },
       username: {
         type: Sequelize.TEXT,
         allowNull: false,
-        unique: {
-          args: true,
-          msg: 'That username has already been registered'
-        }
+        unique: true
       },
       bio: { type: Sequelize.TEXT },
       image: { type: Sequelize.TEXT },
