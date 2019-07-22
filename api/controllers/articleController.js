@@ -37,7 +37,7 @@ const init = async router => {
     });
   }));
 
-  router.get('/articles/feed', wrap((req, res) => {
+  router.get('/articles/feed', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return getFeed({
       currentUserId: userId
@@ -59,7 +59,7 @@ const init = async router => {
   router.put('/articles/:slug', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return updateArticle({
-      article: req.body.article,
+      body: req.body.article,
       slug: req.params.slug,
       currentUserId: userId
     }).then( result => {
@@ -104,7 +104,11 @@ const init = async router => {
   }));
 
   router.delete('/articles/:slug/comments/:commentId', requireUserMiddleware, wrap((req, res) => {
-    return deleteComment(req.params).then( result => {
+    const userId = path(['user', 'id'], req);
+    return deleteComment({
+      commentId: req.params.commentId,
+      currentUserId: userId
+    }).then( result => {
       return res.json(result);
     });
   }));

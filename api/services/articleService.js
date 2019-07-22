@@ -36,10 +36,18 @@ const getDefaultOptions = currentUserId => {
 };
 
 const transformArticle = R.pipe(
+  article => {
+    if(article && article.toJSON){
+      return article;
+    }
+    const error = new Error('The article does not exist.');
+    error.status = 404;
+    throw error;
+  },
   article => article.toJSON(),
   article => R.assoc('favorited', R.pathOr(0, ['users','length'], article) > 0, article),
   article => R.assoc('favoritesCount', Number(R.pathOr(0, ['favoriteCount','count'], article)), article),
-  //TODO: XSS Vulernability here
+  //TODO: XSS Vulernability here - filter the input
   article => R.assoc('htmlBody', marked(article.body || ''), article),
   R.omit(['users', 'favoriteCount'])
 );
@@ -69,8 +77,6 @@ const getFeed = ({
     as: 'followers',
     where: { followerId: currentUserId }
   }]);
-
-  console.log('feed include', include);
 
   return Article.findAndCountAll({
     include,
@@ -128,8 +134,6 @@ const getArticlesList = ({
     tag ? {tagList: { [Op.contains]: [tag]}} : {}
   );
 
-  console.log(where);
-
   const options = {
     ...defaultOptions,
     where,
@@ -144,21 +148,21 @@ const getArticlesList = ({
   });
 };
 
-//TODO check to see if user is allowed to update article - probably a
-//good thing to leave open for the hackathon
-const updateArticle = ({slug, article, currentUserId}) => {
-  return Article.update(article, { where: { slug: String(slug) }} ).then( () => {
+const updateArticle = ({slug, body, currentUserId}) => {
+  return getArticle({slug, currentUserId}).then(({article}) => {
+    if(article.authorId !== currentUserId){
+      const error = new Error('You do not have permission to edit this article');
+      error.status = 403;
+      throw error;
+    }
+    return Article.update(R.omit(['id', 'authorId'], body), { where: { slug: String(slug) }} );
+  }).then( () => {
     return getArticle({slug, currentUserId});
   });
 };
 
 const deleteArticle = ({slug, currentUserId}) => {
   return getArticle({slug, currentUserId}).then(({article}) => {
-    if(!article){
-      const error = new Error('Article does not exist.');
-      error.status = 400;
-      throw error;
-    }
     if(article.authorId !== currentUserId){
       const error = new Error('You do not have permission to delete this article');
       error.status = 403;
@@ -222,10 +226,16 @@ const getComments = ({slug}) => {
   });
 };
 
-const deleteComment = ({commentId}) => {
-  //TODO check permissions
-  return Comment.destroy({
-    where:{id: commentId},
+const deleteComment = ({commentId, currentUserId}) => {
+  return Comment.findOne({where: {id: commentId}}).then( comment => {
+    if(comment.authorId !== currentUserId){
+      const error = new Error('You do not have permission to delete this comment.');
+      error.status = 403;
+      throw error;
+    }
+    return Comment.destroy({
+      where:{id: commentId},
+    });
   });
 };
 

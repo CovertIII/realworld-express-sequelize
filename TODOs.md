@@ -4,12 +4,13 @@ Here's a list of things todo
   *  Validation for data coming into the API, pass a JSON schema
      for bodies for POST, PUT and validate those bodies. (400
      errors)
+    *  Limit on the article title, and on the article summary
+    *  Validation for username (max length) & uriencode it on
+        front end
   *  DONE Giving a 401 error for endpoints that shouldn't be accessed
      if you are not logged in.
-  *  Give a 403 error if you try to access something that you
+  *  DONE Give a 403 error if you try to access something that you
      shouldn't be allowed to have access to.
-  *  Validation for username (max length) & uriencode it on
-      front end
   *  Add the front end to the project as well
   *  Host it on heroku
 
