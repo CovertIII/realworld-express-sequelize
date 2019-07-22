@@ -1,11 +1,11 @@
 Here's a list of things todo
   *  HTTP logging middleware - (would have been nice for
       hackathon)
-  *  Validation for data coming into the API, pass a JSON schema
+  *  DONE Validation for data coming into the API, pass a JSON schema
      for bodies for POST, PUT and validate those bodies. (400
      errors)
-    *  Limit on the article title, and on the article summary
-    *  Validation for username (max length) & uriencode it on
+    *  DONE Limit on the article title, and on the article summary
+    *  DONE Validation for username (max length) & uriencode it on
         front end
   *  Do tags the right way?
   *  DONE Giving a 401 error for endpoints that shouldn't be accessed

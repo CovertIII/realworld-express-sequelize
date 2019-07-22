@@ -40,6 +40,10 @@ const init = async router => {
       username: req.query.author,
       tag: req.query.tag,
       favorited: req.query.favorited,
+      offset: req.query.offset,
+      limit: req.query.limit,
+      orderBy: 'createdAt',
+      orderDirection: 'DESC'
     }).then( result => {
       return res.json(result);
     });
@@ -48,7 +52,9 @@ const init = async router => {
   router.get('/articles/feed', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return getFeed({
-      currentUserId: userId
+      currentUserId: userId,
+      offset: req.query.offset,
+      limit: req.query.limit
     }).then( result => {
       return res.json(result);
     });

@@ -69,7 +69,9 @@ const getArticle = ({
 };
 
 const getFeed = ({
-  currentUserId
+  currentUserId,
+  offset = 0,
+  limit = 10
 }) => {
   const defaultOptions = getDefaultOptions(currentUserId);
   const include = defaultOptions.include.concat([{
@@ -83,7 +85,9 @@ const getFeed = ({
     order: [[
       'createdAt',
       'DESC'
-    ]]
+    ]],
+    offset: Number(offset),
+    limit: Number(limit),
   }).then(({count, rows}) => {
     return {
       articles: rows.map(transformArticle),
@@ -97,12 +101,16 @@ const getArticlesList = ({
   username,
   favorited,
   tag,
-  orderBy,
-  orderDirection
+  orderBy = 'createdAt',
+  orderDirection = 'DESC',
+  offset = 0,
+  limit = 10
 } = {}) => {
   const defaultOptions = getDefaultOptions(currentUserId);
   if(favorited){
     return Favorite.findAndCountAll({
+      offset: Number(offset),
+      limit: Number(limit),
       include: [
         {
           model: Article,
@@ -136,6 +144,8 @@ const getArticlesList = ({
 
   const options = {
     ...defaultOptions,
+    offset: Number(offset),
+    limit: Number(limit),
     where,
     order
   };
