@@ -3,9 +3,10 @@ global.Promise = Promise;
 
 require('dotenv').config();
 
+const express = require('express');
+const morgan = require('morgan');
 const path = require('path');
 const cors = require('cors');
-const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
@@ -30,6 +31,7 @@ const main = async () => {
   console.log('public path:', publicPath);
   app.use(express.static(publicPath));
 
+  app.use(morgan('combined'));
 
   // Router stuff here
   // Tell IE not to cache get responses so I can take away cache busting

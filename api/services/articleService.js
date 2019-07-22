@@ -21,9 +21,9 @@ const createArticle = ({
   });
 };
 
-const getDefaultOptions = currentUserId => {
+const getDefaultOptions = ({currentUserId, username}) => {
   const include = [
-    { model: User, as: 'author' },
+    { model: User, as: 'author', where: username ? { username } : {} },
     { model: FavoriteCount, as: 'favoriteCount', required: false },
     currentUserId && {
       model: User,
@@ -58,7 +58,7 @@ const getArticle = ({
   slug
 }) => {
   const where = articleId ? { id: articleId } : { slug };
-  const defaultOptions = getDefaultOptions(currentUserId);
+  const defaultOptions = getDefaultOptions({currentUserId});
   return Article.findOne({
     ...defaultOptions,
     where
@@ -73,7 +73,7 @@ const getFeed = ({
   offset = 0,
   limit = 10
 }) => {
-  const defaultOptions = getDefaultOptions(currentUserId);
+  const defaultOptions = getDefaultOptions({currentUserId});
   const include = defaultOptions.include.concat([{
     model: Follow,
     as: 'followers',
@@ -106,7 +106,7 @@ const getArticlesList = ({
   offset = 0,
   limit = 10
 } = {}) => {
-  const defaultOptions = getDefaultOptions(currentUserId);
+  const defaultOptions = getDefaultOptions({currentUserId, username});
   if(favorited){
     return Favorite.findAndCountAll({
       offset: Number(offset),
@@ -138,7 +138,6 @@ const getArticlesList = ({
   ]] : undefined;
 
   const where = Object.assign({},
-    username ? { '$author.username$': username } : {},
     tag ? {tagList: { [Op.contains]: [tag]}} : {}
   );
 
