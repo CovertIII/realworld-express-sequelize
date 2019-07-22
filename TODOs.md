@@ -12,7 +12,7 @@ Here's a list of things todo
      if you are not logged in.
   *  DONE Give a 403 error if you try to access something that you
      shouldn't be allowed to have access to.
-  *  Limit and offset for articles and feed
+  *  DONE Limit and offset for articles and feed
   *  Add the front end to the project as well
   *  Host it on heroku
 
