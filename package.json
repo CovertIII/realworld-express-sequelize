@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/CovertIII/realworld-starter-kit#readme",
   "dependencies": {
+    "ajv": "^6.10.2",
     "bcrypt": "^3.0.6",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",

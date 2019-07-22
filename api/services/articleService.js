@@ -15,7 +15,7 @@ const createArticle = ({
   userId,
   article = {}
 } = {}) => {
-  const slug = (slugify(article.title) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)).toLowerCase();
+  const slug = (slugify(article.title).slice(0, 30) + '-' + (Math.random() * Math.pow(36, 6) | 0).toString(36)).toLowerCase();
   return Article.create({...article, slug, authorId: userId}).then(result => {
     return getArticle({articleId: result.id});
   });
@@ -155,7 +155,7 @@ const updateArticle = ({slug, body, currentUserId}) => {
       error.status = 403;
       throw error;
     }
-    return Article.update(R.omit(['id', 'authorId'], body), { where: { slug: String(slug) }} );
+    return Article.update(R.omit(['id', 'authorId', 'slug'], body), { where: { slug: String(slug) }} );
   }).then( () => {
     return getArticle({slug, currentUserId});
   });

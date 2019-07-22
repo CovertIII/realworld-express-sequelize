@@ -1,4 +1,5 @@
 const { wrap } = require('../middleware/error-middleware.js');
+const { schemaValidationMiddleware } = require('../middleware/schemaValidationMiddleware.js');
 const { requireUserMiddleware } = require('../middleware/authenticate-middleware.js');
 const {
   createArticle,
@@ -14,16 +15,23 @@ const {
   favoriteArticle,
   unfavoriteArticle
 } = require('../services/articleService.js');
+const { articleSchema } = require('../schemas/articleSchema.js');
+const { commentSchema } = require('../schemas/commentSchema.js');
 const { path } = require('ramda');
 
 const init = async router => {
-  router.post('/articles', requireUserMiddleware, wrap((req, res) => {
-    const { article } = req.body;
-    const userId = req.user.id;
-    return createArticle({article, userId}).then( result => {
-      return res.json(result);
-    });
-  }));
+  router.post(
+    '/articles',
+    requireUserMiddleware,
+    schemaValidationMiddleware(articleSchema),
+    wrap((req, res) => {
+      const { article } = req.body;
+      const userId = req.user.id;
+      return createArticle({article, userId}).then( result => {
+        return res.json(result);
+      });
+    })
+  );
 
   router.get('/articles', wrap((req, res) => {
     const userId = path(['user', 'id'], req);
@@ -56,16 +64,21 @@ const init = async router => {
     });
   }));
 
-  router.put('/articles/:slug', requireUserMiddleware, wrap((req, res) => {
-    const userId = path(['user', 'id'], req);
-    return updateArticle({
-      body: req.body.article,
-      slug: req.params.slug,
-      currentUserId: userId
-    }).then( result => {
-      return res.json(result);
-    });
-  }));
+  router.put(
+    '/articles/:slug',
+    requireUserMiddleware,
+    schemaValidationMiddleware(articleSchema),
+    wrap((req, res) => {
+      const userId = path(['user', 'id'], req);
+      return updateArticle({
+        body: req.body.article,
+        slug: req.params.slug,
+        currentUserId: userId
+      }).then( result => {
+        return res.json(result);
+      });
+    })
+  );
 
   router.delete('/articles/:slug', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
@@ -83,17 +96,22 @@ const init = async router => {
     });
   }));
 
-  router.post('/articles/:slug/comments', requireUserMiddleware, wrap((req, res) => {
-    const { comment } = req.body;
-    const userId = path(['user', 'id'], req);
-    return createComment({
-      comment,
-      slug: req.params.slug,
-      currentUserId: userId
-    }).then( result => {
-      return res.json(result);
-    });
-  }));
+  router.post(
+    '/articles/:slug/comments',
+    requireUserMiddleware,
+    schemaValidationMiddleware(commentSchema),
+    wrap((req, res) => {
+      const { comment } = req.body;
+      const userId = path(['user', 'id'], req);
+      return createComment({
+        comment,
+        slug: req.params.slug,
+        currentUserId: userId
+      }).then( result => {
+        return res.json(result);
+      });
+    })
+  );
 
   router.get('/articles/:slug/comments', wrap((req, res) => {
     return getComments({

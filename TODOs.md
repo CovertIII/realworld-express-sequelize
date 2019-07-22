@@ -7,10 +7,12 @@ Here's a list of things todo
     *  Limit on the article title, and on the article summary
     *  Validation for username (max length) & uriencode it on
         front end
+  *  Do tags the right way?
   *  DONE Giving a 401 error for endpoints that shouldn't be accessed
      if you are not logged in.
   *  DONE Give a 403 error if you try to access something that you
      shouldn't be allowed to have access to.
+  *  Limit and offset for articles and feed
   *  Add the front end to the project as well
   *  Host it on heroku
 
