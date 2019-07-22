@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
+    "build": "npm run migrate",
     "migrate": "sequelize db:migrate --migrations-path=api/migrations/ --config=api/config/config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

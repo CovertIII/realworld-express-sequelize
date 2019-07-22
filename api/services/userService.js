@@ -16,7 +16,6 @@ const createUser = async ({
   bio,
   image
 } = {}) => {
-
   if(!password){
     throw new Error('Password required');
   }
@@ -96,7 +95,6 @@ const updateUser = ({id, body, token}) => {
       return;
     }
     //Update password if there is one in the body
-
     const hash = await bcrypt.hashAsync(body.password, 12);
     return Passport.update(
       { value: hash },
