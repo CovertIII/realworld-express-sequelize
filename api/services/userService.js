@@ -91,14 +91,27 @@ const loginUser = async ({email, password}) => {
 };
 
 const updateUser = ({id, body, token}) => {
-  return User.update(body, { where: { id: String(id) }} ).then( () => {
+  return Promise.resolve().then(async () => {
+    if(!body.password){
+      return;
+    }
+    //Update password if there is one in the body
+
+    const hash = await bcrypt.hashAsync(body.password, 12);
+    return Passport.update(
+      { value: hash },
+      { where: { userId: id, type: 'password' } }
+    );
+  }).then(() => {
+    return User.update(body, { where: { id: String(id) }} );
+  }).then( () => {
     return User.findOne({
       where: { id: String(id) }
-    }).then( user => {
-      const jsonUser = user.toJSON();
-      jsonUser.token = token;
-      return { user: jsonUser};
     });
+  }).then( user => {
+    const jsonUser = user.toJSON();
+    jsonUser.token = token;
+    return { user: jsonUser};
   });
 };
 
