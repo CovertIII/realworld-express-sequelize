@@ -34,6 +34,17 @@ const authenticateMiddleware = async (req, res, next) => {
   }
 };
 
+//Used to require a user to be present for a route
+const requireUserMiddleware = async (req, res, next) => {
+  if(req.user && req.user.id){
+    return next();
+  }
+  const error = new Error('You need to be logged in to do this.');
+  error.status = 401;
+  next(error);
+};
+
 module.exports = {
-  authenticateMiddleware
+  authenticateMiddleware,
+  requireUserMiddleware
 };

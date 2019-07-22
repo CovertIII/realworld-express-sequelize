@@ -1,4 +1,5 @@
 const { wrap } = require('../middleware/error-middleware.js');
+const { requireUserMiddleware } = require('../middleware/authenticate-middleware.js');
 const {
   createArticle,
   getArticlesList,
@@ -16,7 +17,7 @@ const {
 const { path } = require('ramda');
 
 const init = async router => {
-  router.post('/articles', wrap((req, res) => {
+  router.post('/articles', requireUserMiddleware, wrap((req, res) => {
     const { article } = req.body;
     const userId = req.user.id;
     return createArticle({article, userId}).then( result => {
@@ -55,7 +56,7 @@ const init = async router => {
     });
   }));
 
-  router.put('/articles/:slug', wrap((req, res) => {
+  router.put('/articles/:slug', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return updateArticle({
       article: req.body.article,
@@ -66,7 +67,7 @@ const init = async router => {
     });
   }));
 
-  router.delete('/articles/:slug', wrap((req, res) => {
+  router.delete('/articles/:slug', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return deleteArticle({
       slug: req.params.slug,
@@ -82,7 +83,7 @@ const init = async router => {
     });
   }));
 
-  router.post('/articles/:slug/comments', wrap((req, res) => {
+  router.post('/articles/:slug/comments', requireUserMiddleware, wrap((req, res) => {
     const { comment } = req.body;
     const userId = path(['user', 'id'], req);
     return createComment({
@@ -102,13 +103,13 @@ const init = async router => {
     });
   }));
 
-  router.delete('/articles/:slug/comments/:commentId', wrap((req, res) => {
+  router.delete('/articles/:slug/comments/:commentId', requireUserMiddleware, wrap((req, res) => {
     return deleteComment(req.params).then( result => {
       return res.json(result);
     });
   }));
 
-  router.post('/articles/:slug/favorite', wrap((req, res) => {
+  router.post('/articles/:slug/favorite', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return favoriteArticle({
       currentUserId: userId,
@@ -118,7 +119,7 @@ const init = async router => {
     });
   }));
 
-  router.delete('/articles/:slug/favorite', wrap((req, res) => {
+  router.delete('/articles/:slug/favorite', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return unfavoriteArticle({
       currentUserId: userId,

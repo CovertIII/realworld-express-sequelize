@@ -1,5 +1,6 @@
 const { path } = require('ramda');
 const { wrap } = require('../middleware/error-middleware.js');
+const { requireUserMiddleware } = require('../middleware/authenticate-middleware.js');
 const {
   createUser,
   loginUser,
@@ -25,11 +26,11 @@ const init = async router => {
     });
   }));
 
-  router.get('/user', (req, res) => {
+  router.get('/user', requireUserMiddleware, (req, res) => {
     res.json({user: req.user});
   });
 
-  router.put('/user', wrap((req, res) => {
+  router.put('/user', requireUserMiddleware, wrap((req, res) => {
     const token = req.user.token;
     const id = req.user.id;
     return updateUser({
@@ -51,7 +52,7 @@ const init = async router => {
     );
   }));
 
-  router.post('/profiles/:username/follow', wrap((req, res) => {
+  router.post('/profiles/:username/follow', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return followUsername({
       currentUserId: userId,
@@ -61,7 +62,7 @@ const init = async router => {
     );
   }));
 
-  router.delete('/profiles/:username/follow', wrap((req, res) => {
+  router.delete('/profiles/:username/follow', requireUserMiddleware, wrap((req, res) => {
     const userId = path(['user', 'id'], req);
     return unfollowUsername({
       currentUserId: userId,
