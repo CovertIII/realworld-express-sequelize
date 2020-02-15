@@ -1,4 +1,5 @@
 Here's a list of things todo
+
   *  DONE HTTP logging middleware - (would have been nice for
       hackathon)
   *  DONE Validation for data coming into the API, pass a JSON schema
@@ -14,6 +15,6 @@ Here's a list of things todo
   *  DONE Limit and offset for articles and feed
   *  Do tags the right way?
   *  Add the front end to the project as well
-  *  Host it on heroku
+  *  DONE Host it on heroku
 
 

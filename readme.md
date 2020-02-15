@@ -1,23 +1,34 @@
-# ![RealWorld Example App](logo.png)
+# ![RealWorld Example App](project-logo.png)
 
-> ### [YOUR_FRAMEWORK] codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
-
-
-### [Demo](https://github.com/gothinkster/realworld)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+###  Node.js, express.js and Sequelize codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
 
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **[YOUR_FRAMEWORK]** including CRUD operations, authentication, routing, pagination, and more.
+### [Demo](https://techuppa-kom.herokuapp.com/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
 
-We've gone to great lengths to adhere to the **[YOUR_FRAMEWORK]** community styleguides & best practices.
+
+This codebase was created to demonstrate a fully fledged fullstack application built with node.js, express.js, [Sequelize](https://sequelize.org/), and Postgres including CRUD operations, authentication, routing, pagination, and more.
+
+We've gone to great lengths to adhere to the express community styleguides & best practices.
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
 
 # How it works
 
-> Describe the general architecture of your app here
+The public folder has a complied JavaScript client in it to
+interact with the program.
 
 # Getting started
 
-> npm install, npm start, etc.
+To get the server running locally:
 
+ - Install postgres
+ - run `npm install`
+ - create a .env file do define the environment variables like
+   this:
+```
+JWT_SECRET=<secure random string>
+DATABASE_URL=postgresql://postgres@localhost:5432/realworld
+PORT=3010
+```
+ - then run `npm start`
