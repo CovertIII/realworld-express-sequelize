@@ -24,7 +24,7 @@ To get the server running locally:
 
  - Install postgres
  - run `npm install`
- - create a .env file do define the environment variables like
+ - create a .env file to define the environment variables like
    this:
 ```
 JWT_SECRET=<secure random string>
